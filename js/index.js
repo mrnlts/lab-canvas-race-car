@@ -17,8 +17,7 @@ window.onload = () => {
   carImg.src = './images/car.png';
   
   function drawCar(){
-    // console.log('drawCar');
-    return ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
+    ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
   }
   
   document.addEventListener('keydown', event => {
@@ -30,67 +29,40 @@ window.onload = () => {
         if (car.x <= 380) {car.x += 40;} else if (car.x > 380) {car.x += 0;}
         break;
     }
-    update();
+    clearBoard();
+    drawCar();
   });
-      
-      // case (car.x > 400):
-      //   switch (event.code) {
-      //     case "ArrowLeft":
-      //       car.x -= 40;
-      //       break;
-      //     case "ArrowRight":
-      //       car.x += 0;
-      //       break;
-      //   }
-      //   break;
-      // case (car.x < 40):
-      //   switch (event.code) {
-      //     case "ArrowLeft":
-      //       car.x -= 0;
-      //       break;
-      //     case "ArrowRight":
-      //       car.x += 40;
-      //       break;
-      //   }
-      //   break;
-
-
-  let randomNum = Math.random()*500;
-  // let bigSmall = Math.floor(Math.random());
+  
+  let randomNum = (Math.random()*260)+80;
+  let bigSmall = Math.round(Math.random());
 
   let obstacle = {
     x: randomNum,
     y: 0,
-    w: 20,
+    w: 100 + 100*bigSmall,
     h: 20
   };
+
+  function clearBoard() {
+    ctx.clearRect(0,0,500,700);
+  }
 
   function drawObstacles(){
     ctx.fillStyle = 'red';
     ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
+    obstacle.y += 10;
   }
 
-  function update() {
-    ctx.clearRect(0,0,500,700);
-    drawCar();
-    drawObstacles();
-    moveObstacle();
-    // window.requestAntimationFrame(update);
-  }
-
-  function moveObstacle() {
-    return obstacle.y += 10;
+  function drawBoard() {
+    setInterval(clearBoard, 100);
+    setInterval(drawCar, 100);
+    setInterval(drawObstacles, 100);
   }
 
   function startGame() {
     document.getElementById("canvas").style.visibility = "visible";
     drawCar();
-    update();
     drawObstacles();
-    // moveCar();
-    //drawScore();
+    drawBoard(); 
   }
-  
-  setInterval(moveObstacle, 800);
-  // window.requestAntimationFrame(update);
 }
