@@ -41,4 +41,5 @@ body button {
   background-image: url("/images/road.png");
   background-repeat: no-repeat;
   background-size: 100%;
+  visibility: hidden;
 }
