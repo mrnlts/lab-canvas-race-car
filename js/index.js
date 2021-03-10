@@ -21,23 +21,17 @@ window.onload = () => {
   
   function drawCar(){
     console.log('drawCar');
-    ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
+    return ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
   }
 
   
   document.addEventListener('keydown', event => {
     switch (event.code) {
       case "ArrowLeft":
-        // ctx.clearRect(0,0,500,700);
         car.x -= 40;
-        // drawCar();
-        // drawObstacles();
         break;
       case "ArrowRight":
-        // ctx.clearRect(0,0,500,700);  
         car.x += 40;
-        // drawCar();
-        // drawObstacles();
         break;
     }
     update();
@@ -56,18 +50,20 @@ window.onload = () => {
   function drawObstacles(){
     ctx.fillStyle = 'red';
     ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
-    function moveObstacle() {
-      return obstacle.y += 10;
-    }
   }
 
   function update() {
     ctx.clearRect(0,0,500,700);
     drawCar();
     drawObstacles();
+    moveObstacle();
     window.requestAntimationFrame(update);
   }
- 
+
+  function moveObstacle() {
+    return obstacle.y += 10;
+  }
+
   function startGame() {
     document.getElementById("canvas").style.visibility = "visible";
     drawCar();
