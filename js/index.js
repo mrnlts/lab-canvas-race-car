@@ -10,32 +10,50 @@ window.onload = () => {
     x: 225,
     y: 550,
     w: 52,
-    h: 106,
-    // moveLeft: function () {return this.x-=40;},
-    // moveRight: function () {return this.x+=40;}
+    h: 106
   };
 
   const carImg = new Image();
   carImg.src = './images/car.png';
-  // carImg.onload = () => ctx.drawImage(carImg, car.x, car.y, car.w, car.h);  
   
   function drawCar(){
-    console.log('drawCar');
+    // console.log('drawCar');
     return ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
   }
-
   
   document.addEventListener('keydown', event => {
     switch (event.code) {
       case "ArrowLeft":
-        car.x -= 40;
+        if (car.x >=80) {car.x -= 40;} else if (car.x <80) {car.x -= 0;}
         break;
       case "ArrowRight":
-        car.x += 40;
+        if (car.x <= 380) {car.x += 40;} else if (car.x > 380) {car.x += 0;}
         break;
     }
     update();
   });
+      
+      // case (car.x > 400):
+      //   switch (event.code) {
+      //     case "ArrowLeft":
+      //       car.x -= 40;
+      //       break;
+      //     case "ArrowRight":
+      //       car.x += 0;
+      //       break;
+      //   }
+      //   break;
+      // case (car.x < 40):
+      //   switch (event.code) {
+      //     case "ArrowLeft":
+      //       car.x -= 0;
+      //       break;
+      //     case "ArrowRight":
+      //       car.x += 40;
+      //       break;
+      //   }
+      //   break;
+
 
   let randomNum = Math.random()*500;
   // let bigSmall = Math.floor(Math.random());
@@ -57,7 +75,7 @@ window.onload = () => {
     drawCar();
     drawObstacles();
     moveObstacle();
-    window.requestAntimationFrame(update);
+    // window.requestAntimationFrame(update);
   }
 
   function moveObstacle() {
@@ -69,10 +87,10 @@ window.onload = () => {
     drawCar();
     update();
     drawObstacles();
-    moveCar();
+    // moveCar();
     //drawScore();
   }
   
   setInterval(moveObstacle, 800);
-  window.requestAntimationFrame(update);
+  // window.requestAntimationFrame(update);
 }
