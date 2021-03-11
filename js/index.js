@@ -5,11 +5,6 @@ window.onload = () => {
 
   const board = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
-
-  function drawBoard() {
-    document.getElementById("canvas").style.visibility = "visible";
-  }
-
   let car = {
     x: 225,
     y: 550,
@@ -19,11 +14,20 @@ window.onload = () => {
 
   const carImg = new Image();
   carImg.src = './images/car.png';
+
+
+  //BOARD
+  function drawBoard() {
+    document.getElementById("canvas").style.visibility = "visible";
+  }
+  function clearBoard() {
+    ctx.clearRect(0,0,500,700);
+  }  
   
+  //CAR
   function drawCar(){
     ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
   }
-  
   document.addEventListener('keydown', event => {
     switch (event.code) {
       case "ArrowLeft":
@@ -35,47 +39,54 @@ window.onload = () => {
     }
   });
   
+  //OBSTACLES
   let randomNum = (Math.random()*260)+80;
   let bigSmall = Math.round(Math.random());
-
-  let obstacle = {
-    x: randomNum,
-    y: 0,
-    w: 100 + 100*bigSmall,
-    h: 20
-  };
-
-  // function newObstacle (){
-  //   obstacle.y += 10;
-  // }
-
-  function drawObstacle () {
-    ctx.fillStyle = 'red';
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
+  class Obstacle {
+    constructor(x, y, w, h) {
+      this.x = x;
+      this.y = y;
+      this.w = w;
+      this.h = h;
+    }
   }
-
+  const obstacleArr = [];
+  function newObstacle (){
+    var newObs = new Obstacle(randomNum, 0, (100+100*bigSmall),20);
+    if (obstacleArr.length < 4) {obstacleArr.push(newObs);}
+    else if (obstacleArr.length >1) {obstacleArr.shift(); obstacleArr.push(newObs);}
+  }
+  function drawObstacles () {
+    obstacleArr.forEach(function(obs) {ctx.fillStyle = 'red'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);});
+  }
   function moveObstacles (){
-    obstacle.y += 1;
-    drawCar();
+    obstacleArr.forEach(obs => obs.y += 1);
   }
+  function isCollide() {
+    obstacleArr.forEach((currentObs) => {
+      if(((car.y + car.h) < (currentObs.y)) || (car.y > (currentObs.y + currentObs.h)) || ((car.x + car.w) < currentObs.x) ||  (car.x > (currentObs.x + currentObs.w))) {
+        console.log('crash');
+      }
+    });     
+    }
 
-  function clearBoard() {
-    ctx.clearRect(0,0,500,700);
-  }
-
+  //UPDATE
   function update() {
     clearBoard();
     drawBoard();
     drawCar();
-    drawObstacle();
+    drawObstacles();
     moveObstacles();
+    isCollide();
     window.requestAnimationFrame(update);
   }
 
+  //START
   function startGame() {
     update(); 
+    newObstacle();
+    setInterval(newObstacle, 3000);
+    setInterval(disableStartBtn, 2000);
   }
-
-  
 }
 window.requestAnimationFrame(update);
