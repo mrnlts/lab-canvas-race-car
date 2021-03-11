@@ -64,11 +64,14 @@ window.onload = () => {
   }
   function isCollide() {
     obstacleArr.forEach((currentObs) => {
-      if(((car.y + car.h) < (currentObs.y)) || (car.y > (currentObs.y + currentObs.h)) || ((car.x + car.w) < currentObs.x) ||  (car.x > (currentObs.x + currentObs.w))) {
-        console.log('crash');
-      }
-    });     
-    }
+      return!
+      ((car.y + car.h) < (currentObs.y)) || 
+      (car.y > (currentObs.y + currentObs.h)) || 
+      ((car.x + car.w) < currentObs.x) ||  
+      (car.x > (currentObs.x + currentObs.w));
+      });
+      console.log('crash');
+  }     
 
   //UPDATE
   function update() {
