@@ -6,6 +6,10 @@ window.onload = () => {
   const board = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
 
+  function drawBoard() {
+    document.getElementById("canvas").style.visibility = "visible";
+  }
+
   let car = {
     x: 225,
     y: 550,
@@ -29,8 +33,6 @@ window.onload = () => {
         if (car.x <= 380) {car.x += 40;} else if (car.x > 380) {car.x += 0;}
         break;
     }
-    clearBoard();
-    drawCar();
   });
   
   let randomNum = (Math.random()*260)+80;
@@ -43,26 +45,37 @@ window.onload = () => {
     h: 20
   };
 
+  // function newObstacle (){
+  //   obstacle.y += 10;
+  // }
+
+  function drawObstacle () {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
+  }
+
+  function moveObstacles (){
+    obstacle.y += 1;
+    drawCar();
+  }
+
   function clearBoard() {
     ctx.clearRect(0,0,500,700);
   }
 
-  function drawObstacles(){
-    ctx.fillStyle = 'red';
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
-    obstacle.y += 10;
-  }
-
-  function drawBoard() {
-    setInterval(clearBoard, 100);
-    setInterval(drawCar, 100);
-    setInterval(drawObstacles, 100);
+  function update() {
+    clearBoard();
+    drawBoard();
+    drawCar();
+    drawObstacle();
+    moveObstacles();
+    window.requestAnimationFrame(update);
   }
 
   function startGame() {
-    document.getElementById("canvas").style.visibility = "visible";
-    drawCar();
-    drawObstacles();
-    drawBoard(); 
+    update(); 
   }
+
+  
 }
+window.requestAnimationFrame(update);
