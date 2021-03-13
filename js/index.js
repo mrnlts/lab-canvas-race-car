@@ -5,7 +5,7 @@ window.onload = () => {
 
   const board = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
-  let car = {
+  const car = {
     x: 225,
     y: 550,
     w: 52,
@@ -18,7 +18,13 @@ window.onload = () => {
 
   //BOARD
   function drawBoard() {
-    document.getElementById("canvas").style.visibility = "visible";
+    document.getElementById("game-board").style.visibility = "visible";
+  }
+  const score = document.getElementById("score");
+  let counter = 0;
+  function addNum() {
+    counter++;
+    score.innerText = `Score: ${counter}`;
   }
   function clearBoard() {
     ctx.clearRect(0,0,500,700);
@@ -40,8 +46,8 @@ window.onload = () => {
   });
   
   //OBSTACLES
-  let randomNum = (Math.random()*260)+80;
-  let bigSmall = Math.round(Math.random());
+  function randomNum () {return (Math.random()*260)+80; randomNum()}
+  function bigSmall () {return Math.round(Math.random()); bigSmall()}
   class Obstacle {
     constructor(x, y, w, h) {
       this.x = x;
@@ -52,7 +58,7 @@ window.onload = () => {
   }
   const obstacleArr = [];
   function newObstacle (){
-    var newObs = new Obstacle(randomNum, 0, (100+100*bigSmall),20);
+    var newObs = new Obstacle(randomNum(), 0, (100+100*bigSmall()),20);
     if (obstacleArr.length < 4) {obstacleArr.push(newObs);}
     else if (obstacleArr.length >1) {obstacleArr.shift(); obstacleArr.push(newObs);}
   }
@@ -62,18 +68,17 @@ window.onload = () => {
   function moveObstacles (){
     obstacleArr.forEach(obs => obs.y += 1);
   }
+
   function isCollide() {
-    obstacleArr.forEach((currentObs) => {
-      return!
-      ((car.y + car.h) < (currentObs.y)) || 
-      (car.y > (currentObs.y + currentObs.h)) || 
-      ((car.x + car.w) < currentObs.x) ||  
-      (car.x > (currentObs.x + currentObs.w));
-      });
-      console.log('crash');
+    obstacleArr.forEach((obs) => {
+      if (obs.y === car.y) {
+        gameOver();
+      }
+    }
+    );
   }     
 
-  //UPDATE
+  //UPDATE & INTERVALS
   function update() {
     clearBoard();
     drawBoard();
@@ -88,8 +93,26 @@ window.onload = () => {
   function startGame() {
     update(); 
     newObstacle();
-    setInterval(newObstacle, 3000);
-    setInterval(disableStartBtn, 2000);
+    const obsInterval = setInterval(newObstacle, 3000);
+    const numInterval =  setInterval(addNum, 500);    
+    isCollide();
+    window.requestAnimationFrame(update);
+  }
+
+  //GAME OVER
+  function gameOver() {
+    clearInterval(obsInterval);
+    clearInterval(numInterval);
+    printGameOver();
+  }
+  
+  function printGameOver() {
+    console.log("that's all folks!");
+    document.getElementById("game-board").style.visibility = "hidden";
+    document.getElementById("game-over").style.visibility = "visible";
+    function printFinalScore() {
+      document.getElementById("final-score").innerText = `${finalScore} points`;
+    }
+    printFinalScore();
   }
 }
-window.requestAnimationFrame(update);
