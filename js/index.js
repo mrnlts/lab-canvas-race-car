@@ -27,27 +27,27 @@ window.onload = () => {
     score.innerText = `Score: ${counter}`;
   }
   function clearBoard() {
-    ctx.clearRect(0,0,500,700);
-  }  
-  
+    ctx.clearRect(0, 0, 500, 700);
+  }
+
   //CAR
-  function drawCar(){
+  function drawCar() {
     ctx.drawImage(carImg, car.x, car.y, car.w, car.h);
   }
   document.addEventListener('keydown', event => {
     switch (event.code) {
       case "ArrowLeft":
-        if (car.x >=80) {car.x -= 40;} else if (car.x <80) {car.x -= 0;}
+        if (car.x >= 80) { car.x -= 40; } else if (car.x < 80) { car.x -= 0; }
         break;
       case "ArrowRight":
-        if (car.x <= 380) {car.x += 40;} else if (car.x > 380) {car.x += 0;}
+        if (car.x <= 380) { car.x += 40; } else if (car.x > 380) { car.x += 0; }
         break;
     }
   });
-  
+
   //OBSTACLES
-  function randomNum () {return (Math.random()*260)+80; randomNum()}
-  function bigSmall () {return Math.round(Math.random()); bigSmall()}
+  function randomNum() { return (Math.random() * 260) + 80; randomNum() }
+  function bigSmall() { return Math.round(Math.random()); bigSmall() }
   class Obstacle {
     constructor(x, y, w, h) {
       this.x = x;
@@ -57,26 +57,26 @@ window.onload = () => {
     }
   }
   const obstacleArr = [];
-  function newObstacle (){
-    var newObs = new Obstacle(randomNum(), 0, (100+100*bigSmall()),20);
-    if (obstacleArr.length < 4) {obstacleArr.push(newObs);}
-    else if (obstacleArr.length >1) {obstacleArr.shift(); obstacleArr.push(newObs);}
+  function newObstacle() {
+    var newObs = new Obstacle(randomNum(), 0, (100 + 100 * bigSmall()), 20);
+    if (obstacleArr.length < 4) { obstacleArr.push(newObs); }
+    else if (obstacleArr.length > 1) { obstacleArr.shift(); obstacleArr.push(newObs); }
   }
-  function drawObstacles () {
-    obstacleArr.forEach(function(obs) {ctx.fillStyle = 'red'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);});
+  function drawObstacles() {
+    obstacleArr.forEach(function (obs) { ctx.fillStyle = 'red'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h); });
   }
-  function moveObstacles (){
+  function moveObstacles() {
     obstacleArr.forEach(obs => obs.y += 1);
   }
 
-  function isCollide() {
-    obstacleArr.forEach((obs) => {
-      if (obs.y === car.y) {
-        gameOver();
-      }
-    }
-    );
-  }     
+  // function isCollide() {
+  //   obstacleArr.forEach((obs) => {
+  //     if (obs.y === car.y) {
+  //       gameOver();
+  //     }
+  //   }
+  //   );
+  // }
 
   //UPDATE & INTERVALS
   function update() {
@@ -85,16 +85,16 @@ window.onload = () => {
     drawCar();
     drawObstacles();
     moveObstacles();
-    isCollide();
+    // isCollide();
     window.requestAnimationFrame(update);
   }
 
   //START
   function startGame() {
-    update(); 
+    update();
     newObstacle();
     const obsInterval = setInterval(newObstacle, 3000);
-    const numInterval =  setInterval(addNum, 500);    
+    const numInterval = setInterval(addNum, 500);
     isCollide();
     window.requestAnimationFrame(update);
   }
@@ -105,14 +105,14 @@ window.onload = () => {
     clearInterval(numInterval);
     printGameOver();
   }
-  
-  function printGameOver() {
-    console.log("that's all folks!");
-    document.getElementById("game-board").style.visibility = "hidden";
-    document.getElementById("game-over").style.visibility = "visible";
-    function printFinalScore() {
-      document.getElementById("final-score").innerText = `${finalScore} points`;
-    }
-    printFinalScore();
-  }
+
+  // function printGameOver() {
+  //   console.log("that's all folks!");
+  //   document.getElementById("game-board").style.visibility = "hidden";
+  //   document.getElementById("game-over").style.visibility = "visible";
+  //   function printFinalScore() {
+  //     document.getElementById("final-score").innerText = `${finalScore} points`;
+  //   }
+  //   printFinalScore();
+  // }
 }
